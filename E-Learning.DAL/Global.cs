@@ -1,0 +1,11 @@
+﻿global using E_Learning.DAL.Database;
+global using E_Learning.DAL.GenaricBase.Implementations;
+global using E_Learning.Domain.Entities;
+global using E_Learning.Domain.Entities.Auths;
+global using E_Learning.Domain.Repositories.Abstractions;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using System.Reflection;
