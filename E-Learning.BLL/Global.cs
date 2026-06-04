@@ -5,6 +5,7 @@ global using E_Learning.BLL.DTOS.Authentications.Responses;
 global using E_Learning.BLL.DTOS.Passwords.Requests;
 global using E_Learning.BLL.DTOS.Register.Requests;
 global using E_Learning.BLL.Services.Abstractions.AuthServices;
+global using E_Learning.BLL.Services.Abstractions.Course;
 global using E_Learning.BLL.Services.Implementations.AuthServices;
 global using E_Learning.BLL.Services.Implementations.AuthServices.Emails;
 global using E_Learning.DAL.Database;

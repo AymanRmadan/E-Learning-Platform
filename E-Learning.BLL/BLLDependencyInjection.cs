@@ -1,4 +1,6 @@
 ﻿
+using E_Learning.BLL.Services.Implementations.Course;
+
 namespace E_Learning.BLL
 {
     public static class BLLDependencyInjection
@@ -10,6 +12,8 @@ namespace E_Learning.BLL
             services.AddScoped<IAuthService, AuthService>();
             services.AddSingleton<IJwtProvider, JwtProvider>();
             services.AddScoped<IEmailSender, EmailService>();
+
+            services.AddScoped<ICourseServices, CourseServices>();
 
             services.AddHttpContextAccessor();
 
