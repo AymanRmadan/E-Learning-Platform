@@ -1,6 +1,4 @@
-﻿using E_Learning.Domain;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
+﻿
 namespace E_Learning.DAL;
 
 public class RoleConfiguration : IEntityTypeConfiguration<ApplicationRole>

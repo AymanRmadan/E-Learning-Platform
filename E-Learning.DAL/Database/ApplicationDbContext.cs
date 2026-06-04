@@ -9,6 +9,10 @@ namespace E_Learning.DAL.Database
         }
 
 
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Learner> Learners { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
