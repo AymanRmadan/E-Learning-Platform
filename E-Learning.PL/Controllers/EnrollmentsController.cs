@@ -16,6 +16,15 @@ namespace E_Learning.PL.Controllers
             _enrollmentServices = enrollmentServices;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] int? LearnerId, int? CourseId, string? Status, DateTime? FromDate, DateTime? ToDate)
+        {
+            var result = await _enrollmentServices.GetAllAsync(LearnerId, CourseId, Status, FromDate, ToDate);
+
+            return result.IsSuccess
+                ? Ok(result.Value)
+                : result.ToProblem();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Enroll([FromBody] CreateEnrollmentRequest request)

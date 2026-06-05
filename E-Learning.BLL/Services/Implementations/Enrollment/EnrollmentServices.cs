@@ -1,5 +1,6 @@
 ﻿using E_Learning.BLL.DTOS.Enrollments.E_Learning.BLL.DTOS.Enrollments.Request;
 using E_Learning.BLL.DTOS.Enrollments.Request;
+using E_Learning.BLL.DTOS.Enrollments.Response;
 using E_Learning.BLL.Services.Abstractions.Enrollment;
 using E_Learning.Domain.Entities;
 using E_Learning.Domain.Enums;
@@ -109,6 +110,26 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
             await _unitOfWork.AuditLogs.InsertAsync(auditLog);
             await _unitOfWork.SaveChangeAsync();
             return Result.Success();
+        }
+
+        public async Task<Result<IReadOnlyList<EnrollmentResponse>>> GetAllAsync(int? LearnerId, int? CourseId, string? Status, DateTime? FromDate, DateTime? ToDate)
+        {
+            var enrollments = await _unitOfWork.Enrollments.GetFilteredEnrollmentsAsync(LearnerId, CourseId, Status, FromDate, ToDate);
+
+            var response = enrollments.Select(e => new EnrollmentResponse(
+                e.Id,
+                e.EnrollmentDate,
+                e.Status.ToString(),
+                e.DecisionDate,
+                e.RejectionReason,
+                new LearnerInfo(e.Learner.Id, e.Learner.FullName, e.Learner.Email),
+                new CourseInfo(e.Course.Id, e.Course.Title, e.Course.DurationHours)
+            )).ToList();
+
+            return Result.Success<IReadOnlyList<EnrollmentResponse>>(response);
+
+
+
         }
     }
 }

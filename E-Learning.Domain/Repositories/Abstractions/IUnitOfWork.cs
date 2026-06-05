@@ -8,9 +8,10 @@ namespace E_Learning.Domain.Repositories.Abstractions
     {
         IGenaricRepository<Course, int> Courses { get; }
         IGenaricRepository<Learner, int> Learners { get; }
-        IGenaricRepository<Enrollment, int> Enrollments { get; }
+        //IGenaricRepository<Enrollment, int> Enrollments { get; }
         IGenaricRepository<AuditLog, int> AuditLogs { get; }
 
+        IEnrollmentRepository Enrollments { get; }
 
         Task<int> SaveChangeAsync();
     }
