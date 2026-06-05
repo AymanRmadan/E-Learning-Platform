@@ -4,6 +4,8 @@
     (
         string Title,
         string Description,
-        int DurationHours
+        int DurationHours,
+        bool RequiresApproval,
+         bool IsActive
         );
 }

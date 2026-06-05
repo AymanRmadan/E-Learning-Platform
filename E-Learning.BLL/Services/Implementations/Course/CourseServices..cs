@@ -23,7 +23,7 @@ public class CourseServices : ICourseServices
             return Result.Failure(CourseErrors.InvalidDuration);
 
         var course = request.Adapt<Domain.Entities.Course>();
-        course.IsActive = true;
+
 
         await _unitOfWork.Courses.InsertAsync(course);
         await _unitOfWork.SaveChangeAsync();

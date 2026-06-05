@@ -229,7 +229,10 @@
         {
             var user = await _userManager.FindByIdAsync(userId);
 
-            var result = await _userManager.ChangePasswordAsync(user!, request.CurrentPassword, request.NewPassword);
+            if (user is null)
+                return Result.Failure(UserErrors.InvalidCredentials);
+
+            var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
 
             if (result.Succeeded)
                 return Result.Success();
@@ -290,7 +293,7 @@
         {
             var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
 
-            var emailBody = EmailBodyBuilder.GenerateEmailBody("ForgetPassword",
+            var emailBody = await EmailBodyBuilder.GenerateEmailBodyAsync("ForgetPassword",
                 templateModel: new Dictionary<string, string>
                 {
                 { "{{name}}", user.FirstName },
@@ -306,7 +309,7 @@
         {
             var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
 
-            var emailBody = EmailBodyBuilder.GenerateEmailBody("EmailConfirmation",
+            var emailBody = await EmailBodyBuilder.GenerateEmailBodyAsync("EmailConfirmation",
                 templateModel: new Dictionary<string, string>
                 {
                 { "{{name}}", user.FirstName },

@@ -1,4 +1,5 @@
 ﻿using E_Learning.BLL.DTOS.Enrollments.E_Learning.BLL.DTOS.Enrollments.Request;
+using E_Learning.BLL.DTOS.Enrollments.Request;
 using E_Learning.BLL.Services.Abstractions.Enrollment;
 using E_Learning.Domain.Entities;
 using E_Learning.Domain.Enums;
@@ -63,6 +64,50 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
             await _unitOfWork.AuditLogs.InsertAsync(auditLog);
             await _unitOfWork.SaveChangeAsync();
 
+            return Result.Success();
+        }
+
+
+        public async Task<Result> TakeDecisionAsync(int enrollmentId, EnrollmentDecisionRequest request)
+        {
+
+            var enrollment = await _unitOfWork.Enrollments.GetByIdAsync(enrollmentId);
+            if (enrollment == null)
+                return Result.Failure(ApprovalErrors.EnrollmentNotFound);
+
+
+            if (enrollment.Status != EnrollmentStatus.PendingApproval)
+                return Result.Failure(ApprovalErrors.InvalidStatusForDecision);
+
+            string oldStatus = enrollment.Status.ToString();
+
+            if (request.Decision == "Approved")
+            {
+                enrollment.Status = EnrollmentStatus.Approved;
+            }
+            else if (request.Decision == "Rejected")
+            {
+                enrollment.Status = EnrollmentStatus.Rejected;
+                enrollment.RejectionReason = request.Reason;
+            }
+
+            enrollment.DecisionDate = DateTime.UtcNow;
+
+            _unitOfWork.Enrollments.Update(enrollment);
+
+            var auditLog = new AuditLog
+            {
+                EntityName = nameof(Domain.Entities.Enrollment),
+                EntityId = enrollment.Id,
+                Action = $"UPDATE_ENROLLMENT_STATUS_{request.Decision.ToUpper()}",
+                OldValue = JsonSerializer.Serialize(new { Status = oldStatus }),
+                NewValue = JsonSerializer.Serialize(new { Status = enrollment.Status.ToString(), Reason = enrollment.RejectionReason, DecisionDate = enrollment.DecisionDate }),
+                PerformedBy = "Admin_User",
+                PerformedAt = DateTime.UtcNow
+            };
+
+            await _unitOfWork.AuditLogs.InsertAsync(auditLog);
+            await _unitOfWork.SaveChangeAsync();
             return Result.Success();
         }
     }
