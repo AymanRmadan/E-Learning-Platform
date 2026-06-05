@@ -6,8 +6,8 @@
         {
             builder.HasKey(e => e.Id);
 
-            //A learner cannot enroll twice in the same course
-            builder.HasIndex(e => new { e.LearnerId, e.CourseId }).IsUnique();
+            ////A learner cannot enroll twice in the same course
+            //builder.HasIndex(e => new { e.LearnerId, e.CourseId }).IsUnique();
 
 
 
@@ -25,8 +25,8 @@
 
             builder.Property(e => e.Status)
                    .HasConversion<string>()
-                   .HasMaxLength(30)
-                   .IsRequired();
+                   .HasMaxLength(30);
+
         }
     }
 }

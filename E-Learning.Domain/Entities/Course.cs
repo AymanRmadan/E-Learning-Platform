@@ -6,7 +6,7 @@
         public string Title { get; set; }
         public string Description { get; set; }
         public int DurationHours { get; set; }
-        public bool RequiresApproval { get; set; } = false;
+        public bool RequiresApproval { get; set; } = true;
         public bool IsActive { get; set; } = true;
 
 

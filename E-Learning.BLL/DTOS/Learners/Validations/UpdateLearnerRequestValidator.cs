@@ -6,11 +6,16 @@ namespace E_Learning.BLL.Validations.Learners
     {
         public UpdateLearnerRequestValidator()
         {
-            RuleFor(c => c.FullName)
+            RuleFor(l => l.FullName)
                 .NotEmpty().WithMessage("FullName is required");
 
-            RuleFor(c => c.NationalId)
+            RuleFor(l => l.NationalId)
                 .NotEmpty().WithMessage("NationalId is required");
+
+
+            RuleFor(l => l.Email)
+                .NotEmpty().WithMessage("Email is required")
+                .EmailAddress().WithMessage("Email must be valid");
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿
-
-namespace E_Learning.DAL.Configurations.Courses;
+﻿namespace E_Learning.DAL.Configurations.Courses;
 
 public class CourseConfiguration : IEntityTypeConfiguration<Course>
 {
@@ -9,21 +7,15 @@ public class CourseConfiguration : IEntityTypeConfiguration<Course>
         builder.HasKey(c => c.Id);
 
         builder.Property(c => c.Title)
-            .IsRequired()
+            .HasMaxLength(250);
 
-            .HasMaxLength(100);
         builder.Property(c => c.Description)
-            .IsRequired()
-            .HasMaxLength(1000);
-
-        builder.Property(c => c.DurationHours).
-            IsRequired();
+            .HasMaxLength(2000);
 
         builder.Property(c => c.IsActive)
             .HasDefaultValue(true);
 
         builder.Property(c => c.RequiresApproval)
-            .HasDefaultValue(false);
-
+            .HasDefaultValue(true);
     }
 }

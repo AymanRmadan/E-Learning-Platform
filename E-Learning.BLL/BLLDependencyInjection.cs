@@ -1,6 +1,8 @@
 ﻿
+using E_Learning.BLL.Services.Abstractions.Enrollment;
 using E_Learning.BLL.Services.Abstractions.Learner;
 using E_Learning.BLL.Services.Implementations.Course;
+using E_Learning.BLL.Services.Implementations.Enrollment;
 using E_Learning.BLL.Services.Implementations.Learner;
 
 namespace E_Learning.BLL
@@ -17,6 +19,7 @@ namespace E_Learning.BLL
 
             services.AddScoped<ICourseServices, CourseServices>();
             services.AddScoped<ILearnerServices, LearnerServices>();
+            services.AddScoped<IEnrollmentServices, EnrollmentServices>();
 
 
             services.AddHttpContextAccessor();
