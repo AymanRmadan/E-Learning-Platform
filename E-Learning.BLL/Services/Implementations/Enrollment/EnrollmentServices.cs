@@ -17,11 +17,13 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<Result> EnrollAsync(CreateEnrollmentRequest request)
+        public async Task<Result> EnrollAsync(CreateEnrollmentRequest request, int userId)
         {
-            var isLearnerExist = await _unitOfWork.Learners.AnyAsync(l => l.Id == request.LearnerId);
-            if (!isLearnerExist)
-                return Result.Failure(EnrollmentErrors.LearnerNotFound);
+            var learner = await _unitOfWork.Learners.FirstOrDefaultAsync(l => l.UserId == userId);
+            if (learner == null)
+            {
+                return Result.Failure(LearnerErrors.LearnerNotFound);
+            }
 
             var isCourseExist = await _unitOfWork.Courses.GetByIdAsync(request.CourseId);
             if (isCourseExist == null)
@@ -31,7 +33,7 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
                 return Result.Failure(EnrollmentErrors.InactiveCourse);
 
             var isAlreadyEnrolled = await _unitOfWork.Enrollments
-            .AnyAsync(e => e.LearnerId == request.LearnerId && e.CourseId == request.CourseId);
+            .AnyAsync(e => e.Learner.UserId == learner.UserId && e.CourseId == request.CourseId);
 
             if (isAlreadyEnrolled)
                 return Result.Failure(EnrollmentErrors.AlreadyEnrolled);
@@ -43,7 +45,7 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
 
             var enrollment = new Domain.Entities.Enrollment
             {
-                LearnerId = request.LearnerId,
+                LearnerId = learner.Id,
                 CourseId = request.CourseId,
                 Status = courseStatus,
                 EnrollmentDate = DateTime.UtcNow
@@ -55,10 +57,10 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
             {
                 EntityName = nameof(Domain.Entities.Enrollment),
                 EntityId = enrollment.Id,
-                Action = "INSERT_ENROLLMENT",
+                Action = "INSERT ACTION",
                 OldValue = string.Empty,
-                NewValue = JsonSerializer.Serialize(new { request.LearnerId, request.CourseId, Status = courseStatus.ToString() }),
-                PerformedBy = "System_User",
+                NewValue = JsonSerializer.Serialize(new { userId, request.CourseId, Status = courseStatus.ToString() }),
+                PerformedBy = learner.FullName,
                 PerformedAt = DateTime.UtcNow
             };
 
@@ -71,25 +73,30 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
 
         public async Task<Result> TakeDecisionAsync(int enrollmentId, EnrollmentDecisionRequest request)
         {
-
             var enrollment = await _unitOfWork.Enrollments.GetByIdAsync(enrollmentId);
             if (enrollment == null)
                 return Result.Failure(ApprovalErrors.EnrollmentNotFound);
-
 
             if (enrollment.Status != EnrollmentStatus.PendingApproval)
                 return Result.Failure(ApprovalErrors.InvalidStatusForDecision);
 
             string oldStatus = enrollment.Status.ToString();
 
-            if (request.Decision == "Approved")
+            if (string.Equals(request.Decision, "Approved", StringComparison.OrdinalIgnoreCase))
             {
                 enrollment.Status = EnrollmentStatus.Approved;
             }
-            else if (request.Decision == "Rejected")
+            else if (string.Equals(request.Decision, "Rejected", StringComparison.OrdinalIgnoreCase))
             {
+                if (string.IsNullOrWhiteSpace(request.Reason))
+                    return Result.Failure(ApprovalErrors.RejectionReasonRequired);
+
                 enrollment.Status = EnrollmentStatus.Rejected;
                 enrollment.RejectionReason = request.Reason;
+            }
+            else
+            {
+                return Result.Failure(ApprovalErrors.InvalidStatusForDecision);
             }
 
             enrollment.DecisionDate = DateTime.UtcNow;
@@ -100,18 +107,18 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
             {
                 EntityName = nameof(Domain.Entities.Enrollment),
                 EntityId = enrollment.Id,
-                Action = $"UPDATE_ENROLLMENT_STATUS_{request.Decision.ToUpper()}",
-                OldValue = JsonSerializer.Serialize(new { Status = oldStatus }),
-                NewValue = JsonSerializer.Serialize(new { Status = enrollment.Status.ToString(), Reason = enrollment.RejectionReason, DecisionDate = enrollment.DecisionDate }),
-                PerformedBy = "Admin_User",
+                Action = $"UPDATE ACTION _{enrollment.Status.ToString().ToUpper()}",
+                OldValue = oldStatus,
+                NewValue = enrollment.Status.ToString(),
+                PerformedBy = "Manager",
                 PerformedAt = DateTime.UtcNow
             };
 
             await _unitOfWork.AuditLogs.InsertAsync(auditLog);
             await _unitOfWork.SaveChangeAsync();
+
             return Result.Success();
         }
-
         public async Task<Result<IReadOnlyList<EnrollmentResponse>>> GetAllAsync(int? LearnerId, int? CourseId, string? Status, DateTime? FromDate, DateTime? ToDate)
         {
             var enrollments = await _unitOfWork.Enrollments.GetFilteredEnrollmentsAsync(LearnerId, CourseId, Status, FromDate, ToDate);

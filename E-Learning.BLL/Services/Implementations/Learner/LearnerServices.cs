@@ -23,8 +23,10 @@ namespace E_Learning.BLL.Services.Implementations.Learner
                 return Result.Failure(LearnerErrors.NationalIdDuplicate);
 
             var learner = request.Adapt<Domain.Entities.Learner>();
-
             await _unitOfWork.Learners.InsertAsync(learner!);
+
+            //Defualt value to avoid null Exception
+            //  learner.UserId = "1";
             await _unitOfWork.SaveChangeAsync();
 
             return Result.Success();
@@ -77,5 +79,9 @@ namespace E_Learning.BLL.Services.Implementations.Learner
             return Result.Success(learner);
         }
 
+
     }
+
+
+
 }

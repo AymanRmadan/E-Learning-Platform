@@ -12,5 +12,6 @@ namespace E_Learning.BLL.Services.Abstractions.Learner
         Task<Result> Create(CreateLearnerRequest request);
         Task<Result> Update(int Id, UpdateLearnerRequest request);
         Task<Result> Delete(int Id);
+
     }
 }

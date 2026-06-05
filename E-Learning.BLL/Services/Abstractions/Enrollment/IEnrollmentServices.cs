@@ -6,7 +6,7 @@ namespace E_Learning.BLL.Services.Abstractions.Enrollment
 {
     public interface IEnrollmentServices
     {
-        Task<Result> EnrollAsync(CreateEnrollmentRequest request);
+        Task<Result> EnrollAsync(CreateEnrollmentRequest request, int userId);
 
         Task<Result> TakeDecisionAsync(int enrollmentId, EnrollmentDecisionRequest request);
 

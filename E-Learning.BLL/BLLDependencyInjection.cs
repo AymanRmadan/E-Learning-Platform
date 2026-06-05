@@ -48,16 +48,19 @@ namespace E_Learning.BLL
 
         private static IServiceCollection AddAuthConfig(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddIdentity<ApplicationUser, ApplicationRole>().
-            AddEntityFrameworkStores<ApplicationDbContext>()
-           .AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            {
+                options.Password.RequiredLength = 8;
+                options.SignIn.RequireConfirmedEmail = true;
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
-
-            // services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
             services.AddOptions<JwtOptions>()
-                  .BindConfiguration("Jwt")
-                  .ValidateDataAnnotations()
-                  .ValidateOnStart();
+                .BindConfiguration("Jwt")
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
 
             var jwtSetting = configuration.GetSection("Jwt").Get<JwtOptions>();
 
@@ -66,33 +69,24 @@ namespace E_Learning.BLL
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-               .AddJwtBearer(o =>
-               {
-                   o.SaveToken = true;
-                   o.TokenValidationParameters = new TokenValidationParameters
-                   {
-                       ValidateIssuerSigningKey = true,
-                       ValidateIssuer = true,
-                       ValidIssuer = jwtSetting?.Issuer,
-                       ValidateAudience = true,
-                       ValidAudience = jwtSetting?.Audience,
-                       ValidateLifetime = true,
-                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSetting?.Key!)),
-
-                   };
-               }
-               );
-
-            services.Configure<IdentityOptions>(options =>
+            .AddJwtBearer(o =>
             {
-                options.Password.RequiredLength = 8;
-                options.SignIn.RequireConfirmedEmail = true;
-                options.User.RequireUniqueEmail = true;
+                o.SaveToken = true;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidIssuer = jwtSetting?.Issuer,
+                    ValidateAudience = true,
+                    ValidAudience = jwtSetting?.Audience,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSetting?.Key!)),
+                    RoleClaimType = ClaimTypes.Role
+                };
             });
 
             return services;
         }
-
         private static IServiceCollection AddMapsterConfig(this IServiceCollection services)
         {
             var config = TypeAdapterConfig.GlobalSettings;

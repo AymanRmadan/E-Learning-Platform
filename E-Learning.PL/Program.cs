@@ -10,7 +10,7 @@ builder.Services.AddPL(builder.Configuration);
 
 
 var app = builder.Build();
-
+app.UseExceptionHandler();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -26,6 +26,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseExceptionHandler();
+
 
 app.Run();

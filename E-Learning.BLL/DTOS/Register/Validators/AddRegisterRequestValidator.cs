@@ -1,11 +1,16 @@
-﻿using E_Learning.BLL.DTOS.Register.Requests;
+﻿using E_Learning.BLL.Services.Abstractions.Learner;
 
 namespace E_Learning.BLL.DTOS.Register.Validators
 {
     public class AddRegisterRequestValidator : AbstractValidator<AddRegisterRequest>
     {
-        public AddRegisterRequestValidator()
+        private readonly ILearnerServices _learnerServices;
+
+        public AddRegisterRequestValidator(ILearnerServices learnerServices)
         {
+            _learnerServices = learnerServices;
+
+
             RuleFor(r => r.Email)
                 .NotEmpty()
                 .EmailAddress();
@@ -16,14 +21,15 @@ namespace E_Learning.BLL.DTOS.Register.Validators
                 .Matches(RegexPatterns.Password)
                 .WithMessage("Password should be at least 8 digits and should contains Lowercase, NonAlphanumeric and Uppercase");
 
-            RuleFor(r => r.FirstName)
-                .NotEmpty()
-                .Length(3, 100);
+            RuleFor(l => l.FullName)
+                .NotEmpty().WithMessage("FullName is required");
 
-            RuleFor(r => r.LastName)
-                .NotEmpty()
-                .Length(3, 100);
+            RuleFor(l => l.NationalId)
+             .NotEmpty().WithMessage("NationalId is required");
 
+            RuleFor(l => l.Email)
+                .NotEmpty().WithMessage("Email is required.")
+                .EmailAddress().WithMessage("Email must be valid");
 
         }
 

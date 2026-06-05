@@ -1,6 +1,8 @@
 ﻿using E_Learning.BLL.Commons.ResponseResults;
 using E_Learning.BLL.DTOS.Courses.Request;
 using E_Learning.BLL.Services.Abstractions.Course;
+using E_Learning.Domain;
+using Microsoft.AspNetCore.Authorization;
 
 namespace E_Learning.PL.Controllers
 {
@@ -29,6 +31,7 @@ namespace E_Learning.PL.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = DefaultRoles.Admin)]
         public async Task<IActionResult> Create([FromBody] CreateCourseRequest request)
         {
             var result = await _courseServices.Create(request);

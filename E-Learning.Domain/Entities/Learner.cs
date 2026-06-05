@@ -1,4 +1,6 @@
-﻿namespace E_Learning.Domain.Entities;
+﻿using E_Learning.Domain.Entities.Auths;
+
+namespace E_Learning.Domain.Entities;
 
 public class Learner : BaseEntity<int>
 {
@@ -9,5 +11,8 @@ public class Learner : BaseEntity<int>
 
 
     public ICollection<Enrollment> Enrollments { get; set; }
+
+    public int? UserId { get; set; }
+    public ApplicationUser? User { get; set; }
 
 }

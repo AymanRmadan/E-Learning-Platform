@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace E_Learning.BLL;
+﻿namespace E_Learning.BLL;
 
 public class JwtProvider : IJwtProvider
 {
@@ -13,14 +11,18 @@ public class JwtProvider : IJwtProvider
 
     public (string token, int expiresIn) GenerateToken(ApplicationUser user, IEnumerable<string> roles)
     {
-        Claim[] claims = [
-            new(JwtRegisteredClaimNames.Sub, user.Id),
+        var claims = new List<Claim> {
+            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new(JwtRegisteredClaimNames.Email, user.Email!),
             new(JwtRegisteredClaimNames.GivenName, user.FirstName),
             new(JwtRegisteredClaimNames.FamilyName, user.LastName),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-           new(nameof(roles), JsonSerializer.Serialize(roles), JsonClaimValueTypes.JsonArray)
-        ];
+        };
+
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
 
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));
 

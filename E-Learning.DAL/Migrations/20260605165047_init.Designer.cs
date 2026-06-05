@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ELearning.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260605114120_RelaxDatabaseConstraints")]
-    partial class RelaxDatabaseConstraints
+    [Migration("20260605165047_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,8 +71,11 @@ namespace ELearning.DAL.Migrations
 
             modelBuilder.Entity("E_Learning.Domain.Entities.Auths.ApplicationRole", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -98,24 +101,34 @@ namespace ELearning.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2741bc19-4fc4-49e7-9f21-c07baa01d199",
+                            Id = 1,
                             ConcurrencyStamp = "981ee2ee-8328-48ca-9ea7-012b4fab1888",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "9eaa03df-8e4f-4161-85de-0f6e5e30bfd4",
-                            ConcurrencyStamp = "5ee6bc12-5cb0-4304-91e7-6a00744e042a",
-                            Name = "Member",
-                            NormalizedName = "MEMBER"
+                            Id = 2,
+                            ConcurrencyStamp = "4ee6bc12-5cb0-4304-91e7-6a00744e042b",
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ConcurrencyStamp = "3ee6bc12-5cb0-4304-91e7-6a00744e042c",
+                            Name = "Learner",
+                            NormalizedName = "LEARNER"
                         });
                 });
 
             modelBuilder.Entity("E_Learning.Domain.Entities.Auths.ApplicationUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -192,22 +205,60 @@ namespace ELearning.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f72e03ec-0ba5-4974-b6c3-44a0300f9da0",
+                            Id = 1,
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "c4d9e163-8b3f-5c72-0d9b-8346bfa325ec",
-                            Email = "admin@e-learning.com",
+                            Email = "admin@gmail.com",
                             EmailConfirmed = true,
-                            FirstName = "Ayman",
+                            FirstName = "admin",
                             IsDisabled = false,
-                            LastName = "Ramadan",
+                            LastName = "admin",
                             LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@E-LEARNING.COM",
-                            NormalizedUserName = "AYMAN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEExampleStaticHashHere123456==",
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "Admin",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAokQIS+kj9Ylb63ppdVblNsdTT1Bic4EPZBD35zD77TZC/vgLu6FSTAPHb297pdtw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "b3c8f352-7a2e-4b61-9c8a-7235aef214db",
                             TwoFactorEnabled = false,
-                            UserName = "ayman"
+                            UserName = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "cabd18ab-f314-4be5-ab70-efbb221639e0",
+                            Email = "manager@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Course",
+                            IsDisabled = false,
+                            LastName = "Manager",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MANAGER@GMAIL.COM",
+                            NormalizedUserName = "MANAGER",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAokQIS+kj9Ylb63ppdVblNsdTT1Bic4EPZBD35zD77TZC/vgLu6FSTAPHb297pdtw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "66BF92C9EF0249CDA210D85D1A851BC0",
+                            TwoFactorEnabled = false,
+                            UserName = "manager"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "dabd18ab-f314-4be5-ab70-efbb221639f1",
+                            Email = "learner@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "John",
+                            IsDisabled = false,
+                            LastName = "Learner",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "LEARNER@GMAIL.COM",
+                            NormalizedUserName = "LEARNER",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAokQIS+kj9Ylb63ppdVblNsdTT1Bic4EPZBD35zD77TZC/vgLu6FSTAPHb297pdtw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "77BF92C9EF0249CDA210D85D1A851BC1",
+                            TwoFactorEnabled = false,
+                            UserName = "learner"
                         });
                 });
 
@@ -312,12 +363,19 @@ namespace ELearning.DAL.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Learners");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -331,9 +389,8 @@ namespace ELearning.DAL.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -342,7 +399,7 @@ namespace ELearning.DAL.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -356,9 +413,8 @@ namespace ELearning.DAL.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -367,7 +423,7 @@ namespace ELearning.DAL.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -378,9 +434,8 @@ namespace ELearning.DAL.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -389,13 +444,13 @@ namespace ELearning.DAL.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -406,15 +461,25 @@ namespace ELearning.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "f72e03ec-0ba5-4974-b6c3-44a0300f9da0",
-                            RoleId = "2741bc19-4fc4-49e7-9f21-c07baa01d199"
+                            UserId = 1,
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            UserId = 2,
+                            RoleId = 2
+                        },
+                        new
+                        {
+                            UserId = 3,
+                            RoleId = 3
                         });
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -434,8 +499,8 @@ namespace ELearning.DAL.Migrations
                 {
                     b.OwnsMany("E_Learning.Domain.Entities.Auths.RefreshToken", "RefreshTokens", b1 =>
                         {
-                            b1.Property<string>("UserId")
-                                .HasColumnType("nvarchar(450)");
+                            b1.Property<int>("UserId")
+                                .HasColumnType("int");
 
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
@@ -486,7 +551,16 @@ namespace ELearning.DAL.Migrations
                     b.Navigation("Learner");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("E_Learning.Domain.Entities.Learner", b =>
+                {
+                    b.HasOne("E_Learning.Domain.Entities.Auths.ApplicationUser", "User")
+                        .WithOne("Learner")
+                        .HasForeignKey("E_Learning.Domain.Entities.Learner", "UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("E_Learning.Domain.Entities.Auths.ApplicationRole", null)
                         .WithMany()
@@ -495,7 +569,7 @@ namespace ELearning.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
                     b.HasOne("E_Learning.Domain.Entities.Auths.ApplicationUser", null)
                         .WithMany()
@@ -504,7 +578,7 @@ namespace ELearning.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
                     b.HasOne("E_Learning.Domain.Entities.Auths.ApplicationUser", null)
                         .WithMany()
@@ -513,7 +587,7 @@ namespace ELearning.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
                     b.HasOne("E_Learning.Domain.Entities.Auths.ApplicationRole", null)
                         .WithMany()
@@ -528,13 +602,18 @@ namespace ELearning.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
                     b.HasOne("E_Learning.Domain.Entities.Auths.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("E_Learning.Domain.Entities.Auths.ApplicationUser", b =>
+                {
+                    b.Navigation("Learner");
                 });
 
             modelBuilder.Entity("E_Learning.Domain.Entities.Course", b =>

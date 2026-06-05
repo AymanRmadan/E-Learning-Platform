@@ -67,7 +67,7 @@ namespace E_Learning.PL.Controllers
         [HttpPut("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
-            var result = await _authService.ChangePasswordAsync(User.GetUserId()!, request);
+            var result = await _authService.ChangePasswordAsync(User.GetUserId().ToString()!, request);
 
             return result.IsSuccess ? NoContent() : result.ToProblem();
         }

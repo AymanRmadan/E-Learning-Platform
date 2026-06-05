@@ -1,4 +1,6 @@
-﻿namespace E_Learning.BLL.Services.Implementations.AuthServices
+﻿using E_Learning.Domain.Repositories.Abstractions;
+
+namespace E_Learning.BLL.Services.Implementations.AuthServices
 {
     public class AuthService : IAuthService
     {
@@ -8,13 +10,15 @@
         private readonly ILogger<AuthService> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly int _refreshTokenExpiryDays = 14;
         public AuthService(UserManager<ApplicationUser> userManager
              , IJwtProvider jwtProvider
              , SignInManager<ApplicationUser> signInManager
              , ILogger<AuthService> logger
              , IEmailSender emailSender
-             , IHttpContextAccessor httpContextAccessor)
+             , IHttpContextAccessor httpContextAccessor,
+            IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _jwtProvider = jwtProvider;
@@ -22,6 +26,7 @@
             _logger = logger;
             _emailSender = emailSender;
             _httpContextAccessor = httpContextAccessor;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<AuthResponse>> GetTokenAsync(string email, string password, CancellationToken cancellationToken = default)
@@ -50,7 +55,7 @@
                 });
 
                 await _userManager.UpdateAsync(user);
-                var response = new AuthResponse(user.Id, user.Email, user.FirstName, user.LastName, token, expiresIn * 60, refreshToken, refreshTokenExpiration);
+                var response = new AuthResponse(user.Id.ToString(), user.Email, user.FirstName, user.LastName, token, expiresIn * 60, refreshToken, refreshTokenExpiration);
                 return Result.Success(response);
             }
 
@@ -71,23 +76,40 @@
                 return Result.Failure<AuthResponse>(UserErrors.DuplicatedEmail);
             }
 
-            /*  var user = request.Adapt<ApplicationUser>();
-              user.UserName = request.Email;*/
-
             var user = new ApplicationUser
             {
                 Email = request.Email,
                 UserName = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
+                FirstName = request.FullName,
+                LastName = string.Empty,
+                EmailConfirmed = true
             };
+
+            var checkNationalId = await _unitOfWork.Learners.AnyAsync(l => l.NationalId == request.NationalId);
+            if (checkNationalId)
+                return Result.Failure(LearnerErrors.NationalIdDuplicate);
 
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, DefaultRoles.Learner);
+
+                var learner = new Domain.Entities.Learner
+                {
+
+                    UserId = user.Id,
+                    FullName = request.FullName,
+                    Email = user.Email,
+                    NationalId = request.NationalId,
+                    Department = request.Department
+                };
+
+
+                await _unitOfWork.Learners.InsertAsync(learner);
+                await _unitOfWork.SaveChangeAsync();
+
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
 
                 _logger.LogInformation("Confirmation code : {code}", code);
                 await SendConfirmationEmail(user, code);
@@ -95,11 +117,9 @@
                 return Result.Success();
             }
 
-
             var error = result.Errors.First();
             return Result.Failure<AuthResponse>(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
         }
-
 
         public async Task<Result> ConfirmEmailAsync(ConfirmEmailRequest request)
         {
@@ -124,7 +144,7 @@
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, DefaultRoles.Member);
+                await _userManager.AddToRoleAsync(user, DefaultRoles.Learner);
                 return Result.Success();
             }
 
@@ -193,7 +213,7 @@
             });
             await _userManager.UpdateAsync(user);
 
-            var response = new AuthResponse(user.Id, user.Email, user.FirstName
+            var response = new AuthResponse(user.Id.ToString(), user.Email, user.FirstName
                                  , user.LastName, newToken, expireIn * 60
                                  , newRefreshToken, refreshTokenExpiration);
 

@@ -1,18 +1,26 @@
-﻿using E_Learning.Domain;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace E_Learning.DAL;
-
-public class UserRoleConfiguration : IEntityTypeConfiguration<IdentityUserRole<string>>
+﻿namespace E_Learning.DAL.Configurations
 {
-    public void Configure(EntityTypeBuilder<IdentityUserRole<string>> builder)
+    public class UserRoleConfiguration : IEntityTypeConfiguration<IdentityUserRole<int>>
     {
-        //Default Data
-        builder.HasData(new IdentityUserRole<string>
+        public void Configure(EntityTypeBuilder<IdentityUserRole<int>> builder)
         {
-            UserId = DefaultUsers.AdminId,
-            RoleId = DefaultRoles.AdminRoleId
-        });
+            builder.HasData([
+                new IdentityUserRole<int>
+                {
+                    UserId = DefaultUsers.AdminId,
+                    RoleId = DefaultRoles.AdminRoleId
+                },
+                new IdentityUserRole<int>
+                {
+                    UserId = DefaultUsers.ManagerId,
+                    RoleId = DefaultRoles.ManagerRoleId
+                },
+                new IdentityUserRole<int>
+                {
+                    UserId = DefaultUsers.LearnerUserId,
+                    RoleId = DefaultRoles.LearnerRoleId
+                }
+            ]);
+        }
     }
 }
