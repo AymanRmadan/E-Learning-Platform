@@ -1,5 +1,7 @@
 ﻿
+using E_Learning.BLL.Services.Abstractions.Learner;
 using E_Learning.BLL.Services.Implementations.Course;
+using E_Learning.BLL.Services.Implementations.Learner;
 
 namespace E_Learning.BLL
 {
@@ -14,6 +16,8 @@ namespace E_Learning.BLL
             services.AddScoped<IEmailSender, EmailService>();
 
             services.AddScoped<ICourseServices, CourseServices>();
+            services.AddScoped<ILearnerServices, LearnerServices>();
+
 
             services.AddHttpContextAccessor();
 

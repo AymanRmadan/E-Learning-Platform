@@ -55,7 +55,7 @@ public class CourseServices : ICourseServices
     {
         var course = await _unitOfWork.Courses.GetByIdAsync(Id);
         if (course == null)
-            return Result.Failure<GetCourseByIdResponse>(CourseErrors.CourseNotFound);
+            return Result.Failure<UpdateCourseRequest>(CourseErrors.CourseNotFound);
 
         request.Adapt(course);
 
@@ -68,7 +68,7 @@ public class CourseServices : ICourseServices
     {
         var course = await _unitOfWork.Courses.GetByIdAsync(Id);
         if (course == null)
-            return Result.Failure<GetCourseByIdResponse>(CourseErrors.CourseNotFound);
+            return Result.Failure<UpdateCourseRequest>(CourseErrors.CourseNotFound);
 
         _unitOfWork.Courses.Delete(course);
         await _unitOfWork.SaveChangeAsync();

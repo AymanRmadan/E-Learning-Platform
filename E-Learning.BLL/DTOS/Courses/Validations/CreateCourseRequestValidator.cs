@@ -7,10 +7,10 @@ namespace E_Learning.BLL.DTOS.Courses.Validations
         public CreateCourseRequestValidator()
         {
             RuleFor(c => c.Title)
-                .NotEmpty().WithMessage("Title is required.");
+                .NotEmpty().WithMessage("Title is required");
 
             RuleFor(c => c.DurationHours)
-                .GreaterThan(0).WithMessage("DurationHours must be greater than 0.");
+                .GreaterThan(0).WithMessage("DurationHours must be greater than 0");
         }
     }
 }
