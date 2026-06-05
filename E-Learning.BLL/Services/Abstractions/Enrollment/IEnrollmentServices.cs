@@ -10,6 +10,6 @@ namespace E_Learning.BLL.Services.Abstractions.Enrollment
 
         Task<Result> TakeDecisionAsync(int enrollmentId, EnrollmentDecisionRequest request);
 
-        Task<Result<IReadOnlyList<EnrollmentResponse>>> GetAllAsync(int? LearnerId, int? CourseId, string? Status, DateTime? FromDate, DateTime? ToDate);
+        Task<Result<IReadOnlyList<EnrollmentResponse>>> GetAllAsync(int? LearnerId, int? CourseId, string? Status, DateOnly? FromDate, DateOnly? ToDate);
     }
 }

@@ -18,21 +18,21 @@ namespace E_Learning.PL.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _learnerServices.Get();
+            var result = await _learnerServices.GetAllAsync();
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _learnerServices.GetById(id);
+            var result = await _learnerServices.GetByIdAsync(id);
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateLearnerRequest request)
         {
-            var result = await _learnerServices.Create(request);
+            var result = await _learnerServices.CreateAsync(request);
             return result.IsSuccess ? Ok(new { Message = "Learner Created Successfully" }) : result.ToProblem();
         }
 
@@ -40,14 +40,14 @@ namespace E_Learning.PL.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateLearnerRequest request)
         {
-            var result = await _learnerServices.Update(id, request);
+            var result = await _learnerServices.UpdateAsync(id, request);
             return result.IsSuccess ? NoContent() : result.ToProblem();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _learnerServices.Delete(id);
+            var result = await _learnerServices.DeleteAsync(id);
             return result.IsSuccess ? NoContent() : result.ToProblem();
         }
     }

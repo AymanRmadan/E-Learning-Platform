@@ -7,11 +7,11 @@ namespace E_Learning.BLL.Services.Abstractions.Learner
 {
     public interface ILearnerServices
     {
-        Task<Result<List<GetAllLearnersResponse>>> Get();
-        Task<Result<GetLearnerByIdResponse>> GetById(int Id);
-        Task<Result> Create(CreateLearnerRequest request);
-        Task<Result> Update(int Id, UpdateLearnerRequest request);
-        Task<Result> Delete(int Id);
+        Task<Result<List<GetAllLearnersResponse>>> GetAllAsync();
+        Task<Result<GetLearnerByIdResponse>> GetByIdAsync(int Id);
+        Task<Result> CreateAsync(CreateLearnerRequest request);
+        Task<Result> UpdateAsync(int Id, UpdateLearnerRequest request);
+        Task<Result> DeleteAsync(int Id);
 
     }
 }

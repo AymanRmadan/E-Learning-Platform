@@ -8,7 +8,8 @@ namespace E_Learning.DAL.GenaricBase.Implementations
         {
         }
 
-        public async Task<List<Enrollment>> GetFilteredEnrollmentsAsync(int? LearnerId, int? CourseId, string? Status, DateTime? FromDate, DateTime? ToDate)
+        public async Task<List<Enrollment>> GetFilteredEnrollmentsAsync(
+                int? learnerId, int? courseId, string? status, DateOnly? fromDate, DateOnly? toDate)
         {
 
             var query = _table
@@ -17,23 +18,22 @@ namespace E_Learning.DAL.GenaricBase.Implementations
                 .AsNoTracking();
 
 
-            if (LearnerId.HasValue)
-                query = query.Where(e => e.LearnerId == LearnerId.Value);
+            if (learnerId.HasValue)
+                query = query.Where(e => e.LearnerId == learnerId.Value);
 
-            if (CourseId.HasValue)
-                query = query.Where(e => e.CourseId == CourseId.Value);
+            if (courseId.HasValue)
+                query = query.Where(e => e.CourseId == courseId.Value);
 
-            if (FromDate.HasValue)
-                query = query.Where(e => e.EnrollmentDate >= FromDate.Value.Date);
+            if (fromDate.HasValue)
+                query = query.Where(e => e.EnrollmentDate >= fromDate.Value);
 
-            if (ToDate.HasValue)
+            if (toDate.HasValue)
             {
-                var nextDay = ToDate.Value.Date.AddDays(1);
-                query = query.Where(e => e.EnrollmentDate < nextDay);
+                query = query.Where(e => e.EnrollmentDate <= toDate.Value);
             }
 
-            if (!string.IsNullOrWhiteSpace(Status) &&
-            Enum.TryParse<EnrollmentStatus>(Status, true, out var parsedStatus))
+            if (!string.IsNullOrWhiteSpace(status) &&
+            Enum.TryParse<EnrollmentStatus>(status, true, out var parsedStatus))
             {
                 query = query.Where(e => e.Status == parsedStatus);
             }

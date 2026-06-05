@@ -4,7 +4,12 @@ namespace E_Learning.Domain.Repositories.Abstractions
 {
     public interface IEnrollmentRepository : IGenaricRepository<Enrollment, int>
     {
-        Task<List<Enrollment>> GetFilteredEnrollmentsAsync(int? LearnerId, int? CourseId, string? Status, DateTime? FromDate, DateTime? ToDate);
+        Task<List<Enrollment>> GetFilteredEnrollmentsAsync(
+            int? learnerId,
+            int? courseId,
+            string? status,
+            DateOnly? fromDate,
+            DateOnly? toDate);
     }
 }
 

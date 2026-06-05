@@ -11,6 +11,7 @@ public class Learner : BaseEntity<int>
     public string NationalId { get; set; }
     public string Department { get; set; }
 
+    public DateOnly CreatedAt { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
 
     public ICollection<Enrollment> Enrollments { get; set; }
 

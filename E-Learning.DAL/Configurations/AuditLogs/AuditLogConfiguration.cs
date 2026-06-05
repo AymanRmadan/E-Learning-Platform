@@ -8,19 +8,19 @@
 
             builder.Property(a => a.EntityName)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(100);
 
             builder.Property(a => a.Action)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(100);
 
             builder.Property(a => a.OldValue)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(500);
 
             builder.Property(a => a.NewValue)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(500);
 
             builder.Property(a => a.PerformedBy)
                 .IsRequired()

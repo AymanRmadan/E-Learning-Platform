@@ -9,12 +9,12 @@ public class Enrollment : BaseEntity<int>
     public Course Course { get; set; }
 
 
-    public DateTime EnrollmentDate { get; set; } = DateTime.UtcNow;
+    public DateOnly EnrollmentDate { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
     public EnrollmentStatus Status { get; set; } = EnrollmentStatus.PendingApproval;
 
 
-    public DateTime? DecisionDate { get; set; }
-    public string? RejectionReason { get; set; } // سبب الرفض في حال وجد
+    public DateOnly? DecisionDate { get; set; }
+    public string? RejectionReason { get; set; }
 
 }
 

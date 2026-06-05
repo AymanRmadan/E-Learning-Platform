@@ -6,11 +6,11 @@ namespace E_Learning.BLL.Services.Abstractions.Course
     public interface ICourseServices
     {
 
-        Task<Result<List<GetAllCoursesResponse>>> Get();
-        Task<Result<GetCourseByIdResponse>> GetById(int Id);
-        Task<Result> Create(CreateCourseRequest request);
-        Task<Result> Update(int Id, UpdateCourseRequest request);
-        Task<Result> Delete(int Id);
+        Task<Result<List<GetAllCoursesResponse>>> GetAllAsync();
+        Task<Result<GetCourseByIdResponse>> GetByIdAsync(int Id);
+        Task<Result> CreateAsync(CreateCourseRequest request);
+        Task<Result> UpdateAsync(int Id, UpdateCourseRequest request);
+        Task<Result> DeleteAsync(int Id);
 
     }
 }

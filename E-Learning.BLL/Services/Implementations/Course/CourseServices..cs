@@ -14,7 +14,7 @@ public class CourseServices : ICourseServices
     {
         _unitOfWork = unitOfWork;
     }
-    public async Task<Result> Create(CreateCourseRequest request)
+    public async Task<Result> CreateAsync(CreateCourseRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Title))
             return Result.Failure(CourseErrors.TitleRequired);
@@ -32,7 +32,7 @@ public class CourseServices : ICourseServices
     }
 
 
-    public async Task<Result<List<GetAllCoursesResponse>>> Get()
+    public async Task<Result<List<GetAllCoursesResponse>>> GetAllAsync()
     {
         var courses = await _unitOfWork.Courses.GetAllAsync();
 
@@ -41,7 +41,7 @@ public class CourseServices : ICourseServices
         return Result.Success(response!);
     }
 
-    public async Task<Result<GetCourseByIdResponse>> GetById(int Id)
+    public async Task<Result<GetCourseByIdResponse>> GetByIdAsync(int Id)
     {
         var course = await _unitOfWork.Courses.GetByIdAsync(Id);
         if (course == null)
@@ -51,7 +51,7 @@ public class CourseServices : ICourseServices
         return Result.Success(response!);
     }
 
-    public async Task<Result> Update(int Id, UpdateCourseRequest request)
+    public async Task<Result> UpdateAsync(int Id, UpdateCourseRequest request)
     {
         var course = await _unitOfWork.Courses.GetByIdAsync(Id);
         if (course == null)
@@ -64,7 +64,7 @@ public class CourseServices : ICourseServices
 
         return Result.Success();
     }
-    public async Task<Result> Delete(int Id)
+    public async Task<Result> DeleteAsync(int Id)
     {
         var course = await _unitOfWork.Courses.GetByIdAsync(Id);
         if (course == null)

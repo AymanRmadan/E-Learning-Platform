@@ -19,14 +19,14 @@ namespace E_Learning.PL.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _courseServices.Get();
+            var result = await _courseServices.GetAllAsync();
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _courseServices.GetById(id);
+            var result = await _courseServices.GetByIdAsync(id);
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
         }
 
@@ -34,21 +34,21 @@ namespace E_Learning.PL.Controllers
         [Authorize(Roles = DefaultRoles.Admin)]
         public async Task<IActionResult> Create([FromBody] CreateCourseRequest request)
         {
-            var result = await _courseServices.Create(request);
+            var result = await _courseServices.CreateAsync(request);
             return result.IsSuccess ? Ok(new { Message = "Course Created Successfully" }) : result.ToProblem();
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateCourseRequest request)
         {
-            var result = await _courseServices.Update(id, request);
+            var result = await _courseServices.UpdateAsync(id, request);
             return result.IsSuccess ? NoContent() : result.ToProblem();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _courseServices.Delete(id);
+            var result = await _courseServices.DeleteAsync(id);
             return result.IsSuccess ? NoContent() : result.ToProblem();
         }
     }

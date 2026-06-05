@@ -48,7 +48,7 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
                 LearnerId = learner.Id,
                 CourseId = request.CourseId,
                 Status = courseStatus,
-                EnrollmentDate = DateTime.UtcNow
+                EnrollmentDate = DateOnly.FromDateTime(DateTime.UtcNow)
             };
 
             await _unitOfWork.Enrollments.InsertAsync(enrollment);
@@ -62,7 +62,7 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
                 OldValue = string.Empty,
                 NewValue = JsonSerializer.Serialize(new { userId, request.CourseId, Status = courseStatus.ToString() }),
                 PerformedBy = learner.FullName,
-                PerformedAt = DateTime.UtcNow
+                PerformedAt = DateOnly.FromDateTime(DateTime.UtcNow)
             };
 
             await _unitOfWork.AuditLogs.InsertAsync(auditLog);
@@ -100,7 +100,7 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
                 return Result.Failure(ApprovalErrors.InvalidStatusForDecision);
             }
 
-            enrollment.DecisionDate = DateTime.UtcNow;
+            enrollment.DecisionDate = DateOnly.FromDateTime(DateTime.UtcNow);
 
             _unitOfWork.Enrollments.Update(enrollment);
 
@@ -112,7 +112,7 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
                 OldValue = oldStatus,
                 NewValue = enrollment.Status.ToString(),
                 PerformedBy = "Manager",
-                PerformedAt = DateTime.UtcNow
+                PerformedAt = DateOnly.FromDateTime(DateTime.UtcNow)
             };
 
             await _unitOfWork.AuditLogs.InsertAsync(auditLog);
@@ -120,7 +120,7 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
 
             return Result.Success();
         }
-        public async Task<Result<IReadOnlyList<EnrollmentResponse>>> GetAllAsync(int? LearnerId, int? CourseId, string? Status, DateTime? FromDate, DateTime? ToDate)
+        public async Task<Result<IReadOnlyList<EnrollmentResponse>>> GetAllAsync(int? LearnerId, int? CourseId, string? Status, DateOnly? FromDate, DateOnly? ToDate)
         {
             var enrollments = await _unitOfWork.Enrollments.GetFilteredEnrollmentsAsync(LearnerId, CourseId, Status, FromDate, ToDate);
 

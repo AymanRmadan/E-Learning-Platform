@@ -9,6 +9,6 @@
         public string OldValue { get; set; } = string.Empty;
         public string NewValue { get; set; } = string.Empty;
         public string PerformedBy { get; set; } = string.Empty;
-        public DateTime PerformedAt { get; set; } = DateTime.UtcNow;
+        public DateOnly PerformedAt { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
     }
 }

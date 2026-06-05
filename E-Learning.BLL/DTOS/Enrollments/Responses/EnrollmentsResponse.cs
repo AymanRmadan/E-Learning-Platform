@@ -2,9 +2,9 @@
 
 public record EnrollmentResponse(
     int Id,
-    DateTime EnrollmentDate,
+    DateOnly EnrollmentDate,
     string Status,
-    DateTime? DecisionDate,
+    DateOnly? DecisionDate,
     string? RejectionReason,
     LearnerInfo Learner,
     CourseInfo Course

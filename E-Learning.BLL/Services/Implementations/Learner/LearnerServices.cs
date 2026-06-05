@@ -13,7 +13,7 @@ namespace E_Learning.BLL.Services.Implementations.Learner
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<Result> Create(CreateLearnerRequest request)
+        public async Task<Result> CreateAsync(CreateLearnerRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.FullName))
                 return Result.Failure(LearnerErrors.FullNameRequired);
@@ -32,14 +32,14 @@ namespace E_Learning.BLL.Services.Implementations.Learner
             return Result.Success();
         }
 
-        public async Task<Result<List<GetAllLearnersResponse>>> Get()
+        public async Task<Result<List<GetAllLearnersResponse>>> GetAllAsync()
         {
             var learners = await _unitOfWork.Learners.GetAllAsync();
             var response = learners.Adapt<List<GetAllLearnersResponse>>();
             return Result.Success(response!);
         }
 
-        public async Task<Result<GetLearnerByIdResponse>> GetById(int Id)
+        public async Task<Result<GetLearnerByIdResponse>> GetByIdAsync(int Id)
         {
             var learner = await _unitOfWork.Learners.GetByIdAsync(Id);
             if (learner == null)
@@ -49,7 +49,7 @@ namespace E_Learning.BLL.Services.Implementations.Learner
             return Result.Success(response!);
         }
 
-        public async Task<Result> Update(int Id, UpdateLearnerRequest request)
+        public async Task<Result> UpdateAsync(int Id, UpdateLearnerRequest request)
         {
             var learner = await _unitOfWork.Learners.GetByIdAsync(Id);
             if (learner == null)
@@ -67,7 +67,7 @@ namespace E_Learning.BLL.Services.Implementations.Learner
         }
 
 
-        public async Task<Result> Delete(int Id)
+        public async Task<Result> DeleteAsync(int Id)
         {
             var learner = await _unitOfWork.Learners.GetByIdAsync(Id);
             if (learner == null)

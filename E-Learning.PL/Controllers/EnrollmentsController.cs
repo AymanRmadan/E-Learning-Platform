@@ -20,9 +20,9 @@ namespace E_Learning.PL.Controllers
 
         [HttpGet]
         [Authorize(Roles = $"{DefaultRoles.Admin},{DefaultRoles.Manager}")]
-        public async Task<IActionResult> GetAll([FromQuery] int? LearnerId, int? CourseId, string? Status, DateTime? FromDate, DateTime? ToDate)
+        public async Task<IActionResult> GetAll([FromQuery] int? learnerId, [FromQuery] int? courseId, [FromQuery] string? status, [FromQuery] DateOnly? fromDate, [FromQuery] DateOnly? toDate)
         {
-            var result = await _enrollmentServices.GetAllAsync(LearnerId, CourseId, Status, FromDate, ToDate);
+            var result = await _enrollmentServices.GetAllAsync(learnerId, courseId, status, fromDate, toDate);
 
             return result.IsSuccess
                 ? Ok(result.Value)
@@ -33,12 +33,6 @@ namespace E_Learning.PL.Controllers
         [Authorize(Roles = DefaultRoles.Learner)]
         public async Task<IActionResult> Enroll([FromBody] CreateEnrollmentRequest request)
         {
-            //var result = await _enrollmentServices.EnrollAsync(request);
-
-            //return result.IsSuccess
-            //    ? Ok(new { Message = "Enrollment request processed successfully." })
-            //    : result.ToProblem();
-
             var currentUserId = User.GetUserId();
             var result = await _enrollmentServices.EnrollAsync(request, currentUserId);
             return result.IsSuccess ? Ok(result) : result.ToProblem();
