@@ -5,6 +5,17 @@
         public void Configure(EntityTypeBuilder<Learner> builder)
         {
             builder.HasKey(l => l.Id);
+            // Id No Identity
+            builder.Property(l => l.Id)
+           .ValueGeneratedNever();
+
+
+            // One-to-One مع ApplicationUser
+            builder.HasOne(l => l.User)
+           .WithOne(u => u.Learner)
+           .HasForeignKey<Learner>(l => l.Id)
+           .OnDelete(DeleteBehavior.Cascade);
+
 
             builder.Property(l => l.FullName)
                 .HasMaxLength(250);

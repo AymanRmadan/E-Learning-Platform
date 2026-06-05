@@ -4,6 +4,7 @@ using E_Learning.DAL.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ELearning.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260605212614_AddLearnerRole")]
+    partial class AddLearnerRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,15 +144,24 @@ namespace ELearning.DAL.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsDisabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -198,8 +210,10 @@ namespace ELearning.DAL.Migrations
                             ConcurrencyStamp = "c4d9e163-8b3f-5c72-0d9b-8346bfa325ec",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
+                            FirstName = "admin",
+                            IsDisabled = false,
+                            LastName = "admin",
                             LockoutEnabled = false,
-                            Name = "admin",
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "Admin",
                             PasswordHash = "AQAAAAIAAYagAAAAEAokQIS+kj9Ylb63ppdVblNsdTT1Bic4EPZBD35zD77TZC/vgLu6FSTAPHb297pdtw==",
@@ -215,8 +229,10 @@ namespace ELearning.DAL.Migrations
                             ConcurrencyStamp = "cabd18ab-f314-4be5-ab70-efbb221639e0",
                             Email = "manager@gmail.com",
                             EmailConfirmed = true,
+                            FirstName = "Course",
+                            IsDisabled = false,
+                            LastName = "Manager",
                             LockoutEnabled = false,
-                            Name = "Manager",
                             NormalizedEmail = "MANAGER@GMAIL.COM",
                             NormalizedUserName = "MANAGER",
                             PasswordHash = "AQAAAAIAAYagAAAAEAokQIS+kj9Ylb63ppdVblNsdTT1Bic4EPZBD35zD77TZC/vgLu6FSTAPHb297pdtw==",

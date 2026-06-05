@@ -52,6 +52,7 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
             };
 
             await _unitOfWork.Enrollments.InsertAsync(enrollment);
+            await _unitOfWork.SaveChangeAsync();
 
             var auditLog = new AuditLog
             {

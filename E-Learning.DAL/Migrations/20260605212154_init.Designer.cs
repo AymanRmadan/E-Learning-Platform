@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ELearning.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260605165047_init")]
+    [Migration("20260605212154_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -112,13 +112,6 @@ namespace ELearning.DAL.Migrations
                             ConcurrencyStamp = "4ee6bc12-5cb0-4304-91e7-6a00744e042b",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ConcurrencyStamp = "3ee6bc12-5cb0-4304-91e7-6a00744e042c",
-                            Name = "Learner",
-                            NormalizedName = "LEARNER"
                         });
                 });
 
@@ -240,25 +233,6 @@ namespace ELearning.DAL.Migrations
                             SecurityStamp = "66BF92C9EF0249CDA210D85D1A851BC0",
                             TwoFactorEnabled = false,
                             UserName = "manager"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "dabd18ab-f314-4be5-ab70-efbb221639f1",
-                            Email = "learner@gmail.com",
-                            EmailConfirmed = true,
-                            FirstName = "John",
-                            IsDisabled = false,
-                            LastName = "Learner",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "LEARNER@GMAIL.COM",
-                            NormalizedUserName = "LEARNER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAokQIS+kj9Ylb63ppdVblNsdTT1Bic4EPZBD35zD77TZC/vgLu6FSTAPHb297pdtw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "77BF92C9EF0249CDA210D85D1A851BC1",
-                            TwoFactorEnabled = false,
-                            UserName = "learner"
                         });
                 });
 
@@ -338,10 +312,7 @@ namespace ELearning.DAL.Migrations
             modelBuilder.Entity("E_Learning.Domain.Entities.Learner", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Department")
                         .IsRequired()
@@ -363,14 +334,10 @@ namespace ELearning.DAL.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Learners");
                 });
@@ -468,11 +435,6 @@ namespace ELearning.DAL.Migrations
                         {
                             UserId = 2,
                             RoleId = 2
-                        },
-                        new
-                        {
-                            UserId = 3,
-                            RoleId = 3
                         });
                 });
 
@@ -555,7 +517,9 @@ namespace ELearning.DAL.Migrations
                 {
                     b.HasOne("E_Learning.Domain.Entities.Auths.ApplicationUser", "User")
                         .WithOne("Learner")
-                        .HasForeignKey("E_Learning.Domain.Entities.Learner", "UserId");
+                        .HasForeignKey("E_Learning.Domain.Entities.Learner", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

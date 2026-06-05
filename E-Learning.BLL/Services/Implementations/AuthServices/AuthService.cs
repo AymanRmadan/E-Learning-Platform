@@ -35,8 +35,6 @@ namespace E_Learning.BLL.Services.Implementations.AuthServices
             if (user is null)
                 return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
 
-            if (user.IsDisabled)
-                return Result.Failure<AuthResponse>(UserErrors.DisabledUser);
 
             var result = await _signInManager.PasswordSignInAsync(user, password, false, true);
 
@@ -55,7 +53,7 @@ namespace E_Learning.BLL.Services.Implementations.AuthServices
                 });
 
                 await _userManager.UpdateAsync(user);
-                var response = new AuthResponse(user.Id.ToString(), user.Email, user.FirstName, user.LastName, token, expiresIn * 60, refreshToken, refreshTokenExpiration);
+                var response = new AuthResponse(user.Id.ToString(), user.Email, user.Name, token, expiresIn * 60, refreshToken, refreshTokenExpiration);
                 return Result.Success(response);
             }
 
@@ -80,8 +78,6 @@ namespace E_Learning.BLL.Services.Implementations.AuthServices
             {
                 Email = request.Email,
                 UserName = request.Email,
-                FirstName = request.FullName,
-                LastName = string.Empty,
                 EmailConfirmed = true
             };
 
@@ -97,6 +93,7 @@ namespace E_Learning.BLL.Services.Implementations.AuthServices
                 var learner = new Domain.Entities.Learner
                 {
 
+                    Id = user.Id,
                     UserId = user.Id,
                     FullName = request.FullName,
                     Email = user.Email,
@@ -187,8 +184,6 @@ namespace E_Learning.BLL.Services.Implementations.AuthServices
             if (user is null)
                 return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
 
-            if (user.IsDisabled)
-                return Result.Failure<AuthResponse>(UserErrors.DisabledUser);
 
             if (user.LockoutEnd > DateTime.UtcNow)
                 return Result.Failure<AuthResponse>(UserErrors.LockedUser);
@@ -213,8 +208,8 @@ namespace E_Learning.BLL.Services.Implementations.AuthServices
             });
             await _userManager.UpdateAsync(user);
 
-            var response = new AuthResponse(user.Id.ToString(), user.Email, user.FirstName
-                                 , user.LastName, newToken, expireIn * 60
+            var response = new AuthResponse(user.Id.ToString(), user.Email, user.Name
+                                 , newToken, expireIn * 60
                                  , newRefreshToken, refreshTokenExpiration);
 
             return Result.Success(response);
@@ -316,7 +311,7 @@ namespace E_Learning.BLL.Services.Implementations.AuthServices
             var emailBody = await EmailBodyBuilder.GenerateEmailBodyAsync("ForgetPassword",
                 templateModel: new Dictionary<string, string>
                 {
-                { "{{name}}", user.FirstName },
+                { "{{name}}", user.Name },
                 { "{{action_url}}", $"{origin}/auth/forgetPassword?email={user.Email}&code={code}" }
                 }
             );
@@ -332,7 +327,7 @@ namespace E_Learning.BLL.Services.Implementations.AuthServices
             var emailBody = await EmailBodyBuilder.GenerateEmailBodyAsync("EmailConfirmation",
                 templateModel: new Dictionary<string, string>
                 {
-                { "{{name}}", user.FirstName },
+                { "{{name}}", user.Name },
                     { "{{action_url}}", $"{origin}/auth/emailConfirmation?userId={user.Id}&code={code}" }
                 }
             );

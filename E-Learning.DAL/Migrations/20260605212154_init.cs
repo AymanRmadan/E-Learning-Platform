@@ -203,22 +203,22 @@ namespace ELearning.DAL.Migrations
                 name: "Learners",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     NationalId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Department = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: true)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Learners", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Learners_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Learners_AspNetUsers_Id",
+                        column: x => x.Id,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -280,8 +280,7 @@ namespace ELearning.DAL.Migrations
                 values: new object[,]
                 {
                     { 1, "981ee2ee-8328-48ca-9ea7-012b4fab1888", "Admin", "ADMIN" },
-                    { 2, "4ee6bc12-5cb0-4304-91e7-6a00744e042b", "Manager", "MANAGER" },
-                    { 3, "3ee6bc12-5cb0-4304-91e7-6a00744e042c", "Learner", "LEARNER" }
+                    { 2, "4ee6bc12-5cb0-4304-91e7-6a00744e042b", "Manager", "MANAGER" }
                 });
 
             migrationBuilder.InsertData(
@@ -290,8 +289,7 @@ namespace ELearning.DAL.Migrations
                 values: new object[,]
                 {
                     { 1, 0, "c4d9e163-8b3f-5c72-0d9b-8346bfa325ec", "admin@gmail.com", true, "admin", false, "admin", false, null, "ADMIN@GMAIL.COM", "Admin", "AQAAAAIAAYagAAAAEAokQIS+kj9Ylb63ppdVblNsdTT1Bic4EPZBD35zD77TZC/vgLu6FSTAPHb297pdtw==", null, false, "b3c8f352-7a2e-4b61-9c8a-7235aef214db", false, "admin" },
-                    { 2, 0, "cabd18ab-f314-4be5-ab70-efbb221639e0", "manager@gmail.com", true, "Course", false, "Manager", false, null, "MANAGER@GMAIL.COM", "MANAGER", "AQAAAAIAAYagAAAAEAokQIS+kj9Ylb63ppdVblNsdTT1Bic4EPZBD35zD77TZC/vgLu6FSTAPHb297pdtw==", null, false, "66BF92C9EF0249CDA210D85D1A851BC0", false, "manager" },
-                    { 3, 0, "dabd18ab-f314-4be5-ab70-efbb221639f1", "learner@gmail.com", true, "John", false, "Learner", false, null, "LEARNER@GMAIL.COM", "LEARNER", "AQAAAAIAAYagAAAAEAokQIS+kj9Ylb63ppdVblNsdTT1Bic4EPZBD35zD77TZC/vgLu6FSTAPHb297pdtw==", null, false, "77BF92C9EF0249CDA210D85D1A851BC1", false, "learner" }
+                    { 2, 0, "cabd18ab-f314-4be5-ab70-efbb221639e0", "manager@gmail.com", true, "Course", false, "Manager", false, null, "MANAGER@GMAIL.COM", "MANAGER", "AQAAAAIAAYagAAAAEAokQIS+kj9Ylb63ppdVblNsdTT1Bic4EPZBD35zD77TZC/vgLu6FSTAPHb297pdtw==", null, false, "66BF92C9EF0249CDA210D85D1A851BC0", false, "manager" }
                 });
 
             migrationBuilder.InsertData(
@@ -300,8 +298,7 @@ namespace ELearning.DAL.Migrations
                 values: new object[,]
                 {
                     { 1, 1 },
-                    { 2, 2 },
-                    { 3, 3 }
+                    { 2, 2 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -352,13 +349,6 @@ namespace ELearning.DAL.Migrations
                 name: "IX_Enrollments_LearnerId",
                 table: "Enrollments",
                 column: "LearnerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Learners_UserId",
-                table: "Learners",
-                column: "UserId",
-                unique: true,
-                filter: "[UserId] IS NOT NULL");
         }
 
         /// <inheritdoc />

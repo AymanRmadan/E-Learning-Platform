@@ -2,7 +2,7 @@
 {
     public class BaseEntity<Key>
     {
-        public Key Id { get; private set; }
+        public Key Id { get; set; }
 
     }
 }

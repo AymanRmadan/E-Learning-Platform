@@ -2,10 +2,7 @@
 {
     public sealed class ApplicationUser : IdentityUser<int>
     {
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public bool IsDisabled { get; set; }
-
+        public string Name { get; set; } = string.Empty;
         public Learner? Learner { get; set; }
         public List<RefreshToken> RefreshTokens { get; set; } = [];
     }

@@ -14,8 +14,6 @@
                 rt.Property<int>("UserId");
             });
 
-            builder.Property(u => u.FirstName).HasMaxLength(100);
-            builder.Property(u => u.LastName).HasMaxLength(100);
 
 
             builder.HasData([
@@ -27,11 +25,11 @@
                     Email = "admin@gmail.com",
                     NormalizedEmail = "ADMIN@GMAIL.COM",
                     EmailConfirmed = true,
-                    FirstName = "admin",
-                    LastName = "admin",
+                    Name = "admin",
+
                     SecurityStamp = "b3c8f352-7a2e-4b61-9c8a-7235aef214db",
                     ConcurrencyStamp = "c4d9e163-8b3f-5c72-0d9b-8346bfa325ec",
-                    IsDisabled = false,
+
                     PasswordHash = DefaultUsers.DefaultPasswordHash
                 },
                 new ApplicationUser
@@ -42,26 +40,9 @@
                     Email = "manager@gmail.com",
                     NormalizedEmail = "MANAGER@GMAIL.COM",
                     EmailConfirmed = true,
-                    FirstName = "Course",
-                    LastName = "Manager",
+                    Name = "Manager",
                     SecurityStamp = "66BF92C9EF0249CDA210D85D1A851BC0",
                     ConcurrencyStamp = "cabd18ab-f314-4be5-ab70-efbb221639e0",
-                    IsDisabled = false,
-                    PasswordHash = DefaultUsers.DefaultPasswordHash
-                },
-                new ApplicationUser
-                {
-                    Id = DefaultUsers.LearnerUserId,
-                    UserName = "learner",
-                    NormalizedUserName = "LEARNER",
-                    Email = "learner@gmail.com",
-                    NormalizedEmail = "LEARNER@GMAIL.COM",
-                    EmailConfirmed = true,
-                    FirstName = "John",
-                    LastName = "Learner",
-                    SecurityStamp = "77BF92C9EF0249CDA210D85D1A851BC1",
-                    ConcurrencyStamp = "dabd18ab-f314-4be5-ab70-efbb221639f1",
-                    IsDisabled = false,
                     PasswordHash = DefaultUsers.DefaultPasswordHash
                 }
              ]);

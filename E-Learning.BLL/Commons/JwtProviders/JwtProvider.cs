@@ -14,8 +14,8 @@ public class JwtProvider : IJwtProvider
         var claims = new List<Claim> {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new(JwtRegisteredClaimNames.Email, user.Email!),
-            new(JwtRegisteredClaimNames.GivenName, user.FirstName),
-            new(JwtRegisteredClaimNames.FamilyName, user.LastName),
+            new(JwtRegisteredClaimNames.GivenName, user.Name),
+            new(JwtRegisteredClaimNames.FamilyName, user.Name),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 

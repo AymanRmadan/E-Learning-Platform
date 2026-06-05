@@ -14,11 +14,6 @@
                 {
                     UserId = DefaultUsers.ManagerId,
                     RoleId = DefaultRoles.ManagerRoleId
-                },
-                new IdentityUserRole<int>
-                {
-                    UserId = DefaultUsers.LearnerUserId,
-                    RoleId = DefaultRoles.LearnerRoleId
                 }
             ]);
         }

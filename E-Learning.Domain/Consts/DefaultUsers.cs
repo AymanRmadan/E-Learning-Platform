@@ -12,10 +12,5 @@ public static class DefaultUsers
     public const string ManagerSecurityStamp = "66BF92C9EF0249CDA210D85D1A851BC0";
     public const string ManagerConcurrencyStamp = "cabd18ab-f314-4be5-ab70-efbb221639e0";
 
-    public const int LearnerUserId = 3;
-    public const string LearnerEmail = "learner@gmail.com";
-    public const string LearnerSecurityStamp = "77BF92C9EF0249CDA210D85D1A851BC1";
-    public const string LearnerConcurrencyStamp = "dabd18ab-f314-4be5-ab70-efbb221639f1";
-
     public const string DefaultPasswordHash = "AQAAAAIAAYagAAAAEAokQIS+kj9Ylb63ppdVblNsdTT1Bic4EPZBD35zD77TZC/vgLu6FSTAPHb297pdtw==";
 }
