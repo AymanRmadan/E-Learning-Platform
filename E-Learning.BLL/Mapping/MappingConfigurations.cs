@@ -4,10 +4,6 @@
     {
         public void Register(TypeAdapterConfig config)
         {
-            //if there is prop in response is not the same name in model use this way
-            // var config = new TypeAdapterConfig();
-
-
 
             // config.NewConfig<Learner, GetAllLearnersResponse>()
             //.Map(dest => dest.Id, src => src.Id)
