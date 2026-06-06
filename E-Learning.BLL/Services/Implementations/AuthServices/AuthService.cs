@@ -77,6 +77,7 @@ namespace E_Learning.BLL.Services.Implementations.AuthServices
             var user = new ApplicationUser
             {
                 Email = request.Email,
+                Name = request.Name,
                 UserName = request.Email,
                 EmailConfirmed = true
             };
@@ -95,7 +96,7 @@ namespace E_Learning.BLL.Services.Implementations.AuthServices
 
                     Id = user.Id,
                     UserId = user.Id,
-                    FullName = request.FullName,
+                    FullName = request.Name,
                     Email = user.Email,
                     NationalId = request.NationalId,
                     Department = request.Department

@@ -3,7 +3,7 @@
     public record AddRegisterRequest(
         string Email,
         string Password,
-        string FullName,
+        string Name,
          string NationalId,
         string Department
         );

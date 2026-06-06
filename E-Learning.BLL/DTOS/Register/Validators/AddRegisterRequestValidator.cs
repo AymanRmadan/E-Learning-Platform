@@ -21,7 +21,7 @@ namespace E_Learning.BLL.DTOS.Register.Validators
                 .Matches(RegexPatterns.Password)
                 .WithMessage("Password should be at least 8 digits and should contains Lowercase, NonAlphanumeric and Uppercase");
 
-            RuleFor(l => l.FullName)
+            RuleFor(l => l.Name)
                 .NotEmpty().WithMessage("FullName is required");
 
             RuleFor(l => l.NationalId)

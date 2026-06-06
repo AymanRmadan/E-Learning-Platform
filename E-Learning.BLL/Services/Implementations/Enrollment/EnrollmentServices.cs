@@ -83,11 +83,11 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
 
             string oldStatus = enrollment.Status.ToString();
 
-            if (string.Equals(request.Decision, "Approved", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(request.Decision.Trim().ToLower(), "Approved", StringComparison.OrdinalIgnoreCase))
             {
                 enrollment.Status = EnrollmentStatus.Approved;
             }
-            else if (string.Equals(request.Decision, "Rejected", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(request.Decision.Trim().ToLower(), "Rejected", StringComparison.OrdinalIgnoreCase))
             {
                 if (string.IsNullOrWhiteSpace(request.Reason))
                     return Result.Failure(ApprovalErrors.RejectionReasonRequired);
