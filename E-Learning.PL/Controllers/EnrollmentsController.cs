@@ -19,10 +19,9 @@ namespace E_Learning.PL.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = $"{DefaultRoles.Admin},{DefaultRoles.Manager}")]
-        public async Task<IActionResult> GetAll([FromQuery] int? learnerId, [FromQuery] int? courseId, [FromQuery] string? status, [FromQuery] DateOnly? fromDate, [FromQuery] DateOnly? toDate)
+        public async Task<IActionResult> GetAll([FromQuery] EnrollmentFilterRequest request)
         {
-            var result = await _enrollmentServices.GetAllAsync(learnerId, courseId, status, fromDate, toDate);
+            var result = await _enrollmentServices.GetAllAsync(request);
 
             return result.IsSuccess
                 ? Ok(result.Value)

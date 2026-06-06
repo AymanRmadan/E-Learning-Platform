@@ -17,9 +17,9 @@ namespace E_Learning.PL.Controllers
             _courseServices = courseServices;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] GetAllCourseRequest request)
         {
-            var result = await _courseServices.GetAllAsync();
+            var result = await _courseServices.GetAllAsync(request);
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
         }
 

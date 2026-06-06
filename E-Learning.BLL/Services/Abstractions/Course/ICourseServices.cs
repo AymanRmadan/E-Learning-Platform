@@ -6,7 +6,7 @@ namespace E_Learning.BLL.Services.Abstractions.Course
     public interface ICourseServices
     {
 
-        Task<Result<List<GetAllCoursesResponse>>> GetAllAsync();
+        Task<Result<PaginatedList<GetAllCoursesResponse>>> GetAllAsync(GetAllCourseRequest request);
         Task<Result<GetCourseByIdResponse>> GetByIdAsync(int Id);
         Task<Result> CreateAsync(CreateCourseRequest request);
         Task<Result> UpdateAsync(int Id, UpdateCourseRequest request);

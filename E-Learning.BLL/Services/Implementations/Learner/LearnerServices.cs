@@ -8,10 +8,12 @@ namespace E_Learning.BLL.Services.Implementations.Learner
     public class LearnerServices : ILearnerServices
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public LearnerServices(IUnitOfWork unitOfWork)
+        public LearnerServices(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
         public async Task<Result> CreateAsync(CreateLearnerRequest request)
         {
@@ -32,19 +34,19 @@ namespace E_Learning.BLL.Services.Implementations.Learner
             return Result.Success();
         }
 
-        public async Task<Result<IEnumerable<GetAllLearnersResponse>>> GetAllAsync()
+        public async Task<Result<PaginatedList<GetAllLearnersResponse>>> GetAllAsync(GetAllLearnerRequest request)
         {
             //var learners = await _unitOfWork.Learners.GetAllAsync();
             //var response = learners.Adapt<List<GetAllLearnersResponse>>();
 
 
             //Use Projection For Better Perfomance
-            var learners = await _unitOfWork.Learners.GetQueryable()
+            var learners = _unitOfWork.Learners.GetQueryable()
                 .AsNoTracking()
-                .ProjectToType<GetAllLearnersResponse>()
-                .ToListAsync();
+                .ProjectToType<GetAllLearnersResponse>();
+            var response = await PaginatedList<GetAllLearnersResponse>.CreateAsync(learners, request.PageNumber, request.PageSize);
 
-            return Result.Success<IEnumerable<GetAllLearnersResponse>>(learners!);
+            return Result.Success(response);
         }
 
         public async Task<Result<GetLearnerByIdResponse>> GetByIdAsync(int Id)
@@ -73,22 +75,26 @@ namespace E_Learning.BLL.Services.Implementations.Learner
                 return Result.Failure(LearnerErrors.NationalIdDuplicate);
 
             request.Adapt(learner);
-
             _unitOfWork.Learners.Update(learner);
-            await _unitOfWork.SaveChangeAsync();
+
+            var user = await _userManager.FindByIdAsync(Id.ToString());
+            user.Name = learner.FullName;
+            user.Email = learner.Email;
+            user.UserName = learner.Email;
+
+            await _userManager.UpdateAsync(user);
+            // await _unitOfWork.SaveChangeAsync();
             return Result.Success();
         }
 
 
         public async Task<Result> DeleteAsync(int Id)
         {
-            var learner = await _unitOfWork.Learners.GetByIdAsync(Id);
+            var learner = await _userManager.FindByIdAsync(Id.ToString());
             if (learner == null)
                 return Result.Failure<GetLearnerByIdResponse>(LearnerErrors.LearnerNotFound);
 
-            _unitOfWork.Learners.Delete(learner);
-            await _unitOfWork.SaveChangeAsync();
-
+            await _userManager.DeleteAsync(learner);
             return Result.Success(learner);
         }
 

@@ -17,6 +17,35 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
         {
             _unitOfWork = unitOfWork;
         }
+
+        public async Task<Result<IReadOnlyList<EnrollmentResponse>>> GetAllAsync(EnrollmentFilterRequest request)
+        {
+            var enrollments = await _unitOfWork.Enrollments.
+                                GetFilteredEnrollmentsAsync(
+                                            request.LearnerId,
+                                            request.CourseId,
+                                            request.Status,
+                                            request.FromDate,
+                                            request.ToDate
+                                            );
+
+            var response = enrollments.Select(e => new EnrollmentResponse(
+                e.Id,
+                e.EnrollmentDate,
+                e.Status.ToString(),
+                e.DecisionDate,
+                e.RejectionReason,
+                new LearnerInfo(e.Learner.Id, e.Learner.FullName, e.Learner.Email),
+                new CourseInfo(e.Course.Id, e.Course.Title, e.Course.DurationHours)
+            )).ToList();
+
+            return Result.Success<IReadOnlyList<EnrollmentResponse>>(response);
+
+
+
+        }
+
+
         public async Task<Result> EnrollAsync(CreateEnrollmentRequest request, int userId)
         {
             var learner = await _unitOfWork.Learners.FirstOrDefaultAsync(l => l.UserId == userId);
@@ -119,25 +148,6 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
             await _unitOfWork.SaveChangeAsync();
 
             return Result.Success();
-        }
-        public async Task<Result<IReadOnlyList<EnrollmentResponse>>> GetAllAsync(int? LearnerId, int? CourseId, string? Status, DateOnly? FromDate, DateOnly? ToDate)
-        {
-            var enrollments = await _unitOfWork.Enrollments.GetFilteredEnrollmentsAsync(LearnerId, CourseId, Status, FromDate, ToDate);
-
-            var response = enrollments.Select(e => new EnrollmentResponse(
-                e.Id,
-                e.EnrollmentDate,
-                e.Status.ToString(),
-                e.DecisionDate,
-                e.RejectionReason,
-                new LearnerInfo(e.Learner.Id, e.Learner.FullName, e.Learner.Email),
-                new CourseInfo(e.Course.Id, e.Course.Title, e.Course.DurationHours)
-            )).ToList();
-
-            return Result.Success<IReadOnlyList<EnrollmentResponse>>(response);
-
-
-
         }
     }
 }

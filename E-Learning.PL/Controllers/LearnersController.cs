@@ -16,9 +16,9 @@ namespace E_Learning.PL.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] GetAllLearnerRequest request)
         {
-            var result = await _learnerServices.GetAllAsync();
+            var result = await _learnerServices.GetAllAsync(request);
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
         }
 
@@ -29,12 +29,12 @@ namespace E_Learning.PL.Controllers
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateLearnerRequest request)
-        {
-            var result = await _learnerServices.CreateAsync(request);
-            return result.IsSuccess ? Ok(new { Message = "Learner Created Successfully" }) : result.ToProblem();
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Create([FromBody] CreateLearnerRequest request)
+        //{
+        //    var result = await _learnerServices.CreateAsync(request);
+        //    return result.IsSuccess ? Ok(new { Message = "Learner Created Successfully" }) : result.ToProblem();
+        //}
 
 
         [HttpPut("{id}")]

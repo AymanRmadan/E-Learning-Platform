@@ -32,17 +32,19 @@ public class CourseServices : ICourseServices
     }
 
 
-    public async Task<Result<List<GetAllCoursesResponse>>> GetAllAsync()
+    public async Task<Result<PaginatedList<GetAllCoursesResponse>>> GetAllAsync(GetAllCourseRequest request)
     {
-        //var courses = await _unitOfWork.Courses.GetAllAsync();
-        //var response = courses.Adapt<List<GetAllCoursesResponse>>();
+        var courses = _unitOfWork.Courses.GetQueryable()
+                                   .AsNoTracking()
+                                   .ProjectToType<GetAllCoursesResponse>();
 
-        var courses = await _unitOfWork.Courses.GetQueryable()
-                                  .AsNoTracking()
-                                  .ProjectToType<GetAllCoursesResponse>()
-                                  .ToListAsync();
+        var response = await PaginatedList<GetAllCoursesResponse>.CreateAsync(
+                                                courses,
+                                                request.PageNumber,
+                                                request.PageSize
+                                            );
 
-        return Result.Success(courses);
+        return Result.Success(response);
     }
 
     public async Task<Result<GetCourseByIdResponse>> GetByIdAsync(int Id)

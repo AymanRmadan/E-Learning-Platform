@@ -13,7 +13,7 @@
             // One-to-One مع ApplicationUser
             builder.HasOne(l => l.User)
            .WithOne(u => u.Learner)
-           .HasForeignKey<Learner>(l => l.Id)
+           .HasForeignKey<Learner>(l => l.UserId)
            .OnDelete(DeleteBehavior.Cascade);
 
 
