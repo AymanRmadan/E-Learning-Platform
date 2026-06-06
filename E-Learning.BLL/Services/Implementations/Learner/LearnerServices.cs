@@ -32,21 +32,34 @@ namespace E_Learning.BLL.Services.Implementations.Learner
             return Result.Success();
         }
 
-        public async Task<Result<List<GetAllLearnersResponse>>> GetAllAsync()
+        public async Task<Result<IEnumerable<GetAllLearnersResponse>>> GetAllAsync()
         {
-            var learners = await _unitOfWork.Learners.GetAllAsync();
-            var response = learners.Adapt<List<GetAllLearnersResponse>>();
-            return Result.Success(response!);
+            //var learners = await _unitOfWork.Learners.GetAllAsync();
+            //var response = learners.Adapt<List<GetAllLearnersResponse>>();
+
+
+            //Use Projection For Better Perfomance
+            var learners = await _unitOfWork.Learners.GetQueryable()
+                .AsNoTracking()
+                .ProjectToType<GetAllLearnersResponse>()
+                .ToListAsync();
+
+            return Result.Success<IEnumerable<GetAllLearnersResponse>>(learners!);
         }
 
         public async Task<Result<GetLearnerByIdResponse>> GetByIdAsync(int Id)
         {
-            var learner = await _unitOfWork.Learners.GetByIdAsync(Id);
+            var learner = await _unitOfWork.Learners.GetQueryable()
+                                      .Where(l => l.Id == Id)
+                                      .AsNoTracking()
+                                      .ProjectToType<GetLearnerByIdResponse>()
+                                      .FirstOrDefaultAsync();
             if (learner == null)
                 return Result.Failure<GetLearnerByIdResponse>(LearnerErrors.LearnerNotFound);
 
-            var response = learner.Adapt<GetLearnerByIdResponse>();
-            return Result.Success(response!);
+            //var response = learner.Adapt<GetLearnerByIdResponse>();
+
+            return Result.Success(learner);
         }
 
         public async Task<Result> UpdateAsync(int Id, UpdateLearnerRequest request)

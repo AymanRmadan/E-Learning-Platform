@@ -25,5 +25,7 @@ namespace E_Learning.Domain.Repositories.Abstractions
         void Delete(TEntity entity);
         Task<TEntity?> FindAsync(params object[] id);
 
+        IQueryable<TEntity> GetQueryable();
+
     }
 }

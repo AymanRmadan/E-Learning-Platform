@@ -1,6 +1,4 @@
-﻿
-using E_Learning.Domain.Repositories.Abstractions;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace E_Learning.DAL.GenaricBase.Implementations
 {
@@ -123,6 +121,8 @@ namespace E_Learning.DAL.GenaricBase.Implementations
         {
             return await _table.FindAsync(id);
         }
+
+        public IQueryable<TEntity> GetQueryable() => _table.AsNoTracking();
 
     }
 }

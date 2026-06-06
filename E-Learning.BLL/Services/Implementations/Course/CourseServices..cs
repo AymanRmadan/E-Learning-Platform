@@ -34,21 +34,29 @@ public class CourseServices : ICourseServices
 
     public async Task<Result<List<GetAllCoursesResponse>>> GetAllAsync()
     {
-        var courses = await _unitOfWork.Courses.GetAllAsync();
+        //var courses = await _unitOfWork.Courses.GetAllAsync();
+        //var response = courses.Adapt<List<GetAllCoursesResponse>>();
 
-        var response = courses.Adapt<List<GetAllCoursesResponse>>();
+        var courses = await _unitOfWork.Courses.GetQueryable()
+                                  .AsNoTracking()
+                                  .ProjectToType<GetAllCoursesResponse>()
+                                  .ToListAsync();
 
-        return Result.Success(response!);
+        return Result.Success(courses);
     }
 
     public async Task<Result<GetCourseByIdResponse>> GetByIdAsync(int Id)
     {
-        var course = await _unitOfWork.Courses.GetByIdAsync(Id);
+        var course = await _unitOfWork.Courses.GetQueryable()
+                                       .Where(c => c.Id == Id)
+                                       .AsNoTracking()
+                                       .ProjectToType<GetCourseByIdResponse>()
+                                       .FirstOrDefaultAsync();
         if (course == null)
             return Result.Failure<GetCourseByIdResponse>(CourseErrors.CourseNotFound);
 
-        var response = course.Adapt<GetCourseByIdResponse>();
-        return Result.Success(response!);
+
+        return Result.Success(course);
     }
 
     public async Task<Result> UpdateAsync(int Id, UpdateCourseRequest request)
