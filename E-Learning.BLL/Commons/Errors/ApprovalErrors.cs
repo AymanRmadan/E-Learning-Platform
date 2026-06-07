@@ -3,7 +3,7 @@
     public static class ApprovalErrors
     {
         public static readonly Error EnrollmentNotFound =
-            new("Approval.NotFound", "The enrollment request was not found.", StatusCodes.Status404NotFound);
+            new("Enrollment.NotFound", "The enrollment request was not found.", StatusCodes.Status404NotFound);
         public static readonly Error InvalidStatusForDecision =
             new("Approval.InvalidStatus", "Only pending approval enrollments can be approved or rejected", StatusCodes.Status400BadRequest);
         public static readonly Error InvalidDecisionType =

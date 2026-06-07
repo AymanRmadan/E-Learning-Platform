@@ -2,5 +2,5 @@
 
 public record GetAllLearnerRequest
 (int PageNumber = 1,
-    int PageSize = 3,
+    int PageSize = 10,
     string? SearchTerm = null);

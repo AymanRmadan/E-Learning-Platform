@@ -88,7 +88,7 @@ namespace E_Learning.BLL.Services.Implementations.Enrollment
                 EntityName = nameof(Domain.Entities.Enrollment),
                 EntityId = enrollment.Id,
                 Action = "INSERT ACTION",
-                OldValue = string.Empty,
+                OldValue = JsonSerializer.Serialize(new { userId, request.CourseId, Status = courseStatus.ToString() }),
                 NewValue = JsonSerializer.Serialize(new { userId, request.CourseId, Status = courseStatus.ToString() }),
                 PerformedBy = learner.FullName,
                 PerformedAt = DateOnly.FromDateTime(DateTime.UtcNow)
